@@ -1,0 +1,9 @@
+vocals -> octavedown -> save(vocals1);
+vocals1 -> sharp -> early -> save(vocals2);
+vocals1 -> halfsharp -> late -> late -> save(vocals3);
+vocals1 -> flat -> late -> save(vocals4);
+vocals1 -> halfflat -> early -> early -> save(vocals5);
+bass -> save(bass);
+drums -> late -> save(drums);
+other -> sharp -> save(other);
+piano -> save(piano);

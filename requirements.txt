@@ -1,0 +1,8 @@
+librosa==0.8.1
+numpy==1.21.0
+pydub==0.25.1
+pyparsing==2.4.7
+pytube==11.0.2
+soundfile==0.10.3.post1
+spleeter==2.3.0
+tqdm==4.62.2
