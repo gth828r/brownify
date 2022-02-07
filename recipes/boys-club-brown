@@ -1,0 +1,5 @@
+vocals -> flat -> save(vocals);
+bass -> save(bass);
+drums -> early -> early ->  early ->  early ->  early -> early -> early -> early -> early -> early -> save(drums);
+other -> save(other);
+piano -> sharp -> save(piano);
