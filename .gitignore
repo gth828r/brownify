@@ -1,3 +1,6 @@
 *.mp3
+*.egg-info
 .env
+__pycache__/
+
 pretrained_models/
