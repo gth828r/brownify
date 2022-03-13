@@ -1,5 +1,4 @@
 import argparse
-import sys
 from brownify.downloaders import YoutubeDownloader
 from brownify.errors import BrownifyError, InvalidInputError
 from brownify.parsers import ActionParser
@@ -137,7 +136,3 @@ def main() -> int:
         # Clean up temporary files unless they have been marked for preservation
         if not preserve:
             _cleanup(downloaded_file, session_id)
-
-
-if __name__ == "__main__":
-    sys.exit(main())
