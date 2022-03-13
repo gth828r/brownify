@@ -27,6 +27,11 @@ def get_args() -> argparse.Namespace:
         choices=_LOG_LEVELS,
         help="Log level to use for output",
     )
+    parser.add_argument(
+        "--preserve",
+        action="store_true",
+        help="Allow for intermediate files to be preserved for debugging",
+    )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--recipe", help="Sequence to apply to audio streams")
     group.add_argument(
@@ -79,6 +84,7 @@ def main() -> int:
     youtube_url = args.youtube
     output_file = args.output
     log_level = args.log.upper()
+    preserve = args.preserve
     recipe = args.recipe
     recipe_file = args.recipe_file
 
@@ -129,7 +135,8 @@ def main() -> int:
 
     finally:
         # Clean up temporary files unless they have been marked for preservation
-        _cleanup(downloaded_file, session_id)
+        if not preserve:
+            _cleanup(downloaded_file, session_id)
 
 
 if __name__ == "__main__":
