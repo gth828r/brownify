@@ -1,4 +1,12 @@
-class NoAudioStreamFoundError(Exception):
+class BrownifyError(Exception):
+    """Generic error for brownify"""
+
+
+class InvalidInputError(BrownifyError):
+    """Error raised when invalid user input provided to brownify"""
+
+
+class NoAudioStreamFoundError(BrownifyError):
     """Error raised when a referenced audio stream does not exist
 
     NoAudioStreamFoundError should be raised when an audio stream referenced
@@ -6,7 +14,7 @@ class NoAudioStreamFoundError(Exception):
     """
 
 
-class UnexpectedTokenTypeError(Exception):
+class UnexpectedTokenTypeError(BrownifyError):
     """Error raised when an unexpected token is seen after parsing
 
     UnexpectedTokenTypeError should be raised when performing post-processing
@@ -18,7 +26,7 @@ class UnexpectedTokenTypeError(Exception):
     """
 
 
-class TokenNotInGrammarError(Exception):
+class TokenNotInGrammarError(BrownifyError):
     """Error raised when an token is invalid but passed the parser
 
     TokenNotInGrammarError should be raised when performing post-processing
@@ -30,7 +38,7 @@ class TokenNotInGrammarError(Exception):
     """
 
 
-class NoPipelineSourceError(Exception):
+class NoPipelineSourceError(BrownifyError):
     """Error raised when a pipeline has a source which does not exist
 
     NoPipelineSourceError should be raised when a pipeline has been defined
