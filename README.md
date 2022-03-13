@@ -17,6 +17,32 @@ At this point in time, Brownify supports the 5-stem splitter, which splits songs
  - Vocals
  - Other (i.e. everything else)
 
+## Installation
+At this time, installation requires obtaining the source code. In the future, Brownify will be installable through pypi. It is recommended to install through a venv to avoid cluttering your python installation's packages.
+
+## 1. Obtain the source code
+Clone brownify from github.
+
+## 2.a. Install using venv (recommended)
+```sh
+cd <path-to-brownify>
+
+# (optionally) with venv
+python3 -m venv .env
+source .env/bin/activate
+
+# Install an editable version
+pip3 install -e .
+```
+
+## 2.b. Install at system level
+```sh
+cd <path-to-brownify>
+
+# Install
+pip3 install .
+```
+
 # Usage
 In order to use Brownify, you can either use the python API or a command line program.
 
@@ -79,10 +105,19 @@ save(NAME)
 More examples can be found in the [recipes](recipes) directory.
 
 ## Command line program
-Coming soon.
+After installing Brownify, the `brownify` command will be placed in the path. If installed in a venv, the environment must be activated for the command to be available. Please run `brownify --help` for more details.
+
+Note that the `spleeter` library used by brownify will look for files it needs in the current working directory from wherever brownify is invoked. It is recommended that you navigate to the `brownify` source directory each time you run brownify so that you only need to download those files once. This is not required, but it will speed up running time by avoiding re-downloading the files.
 
 ### Examples
-Coming soon.
+The simplest way to get started with Brownify is to find a song you want to modify on youtube, obtain the URL, and pick an existing recipe from the provided [recipes](recipes) directory. Below is an example that adds a dash of brown to a Christmas song:
+```sh
+# This example assumes that the brownify source is located in your home directory
+cd ~/brownify
+brownify https://www.youtube.com/watch?v=B4RqeAvE7iA boognish-christmas.mp3 --recipe-file recipes/boognish-brown
+```
+
+The result of this command is a file `boognish-christmas.mp3` located in the current directory.
 
 ## Python API
-Coming soon.
+The python documentation will be published as part of the v0.1.1 release.
