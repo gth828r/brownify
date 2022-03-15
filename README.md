@@ -120,4 +120,4 @@ brownify https://www.youtube.com/watch?v=B4RqeAvE7iA boognish-christmas.mp3 --re
 The result of this command is a file `boognish-christmas.mp3` located in the current directory.
 
 ## Python API
-The python documentation will be published as part of the v0.1.1 release.
+The python documentation for the latest release can be found [here.](https://brownify.readthedocs.io/en/latest/brownify.html)
