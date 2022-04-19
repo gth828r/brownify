@@ -20,7 +20,7 @@ class UnexpectedTokenTypeError(BrownifyError):
     UnexpectedTokenTypeError should be raised when performing post-processing
     steps over input which has already been processed by the grammar. It is
     used to catch issues where the syntax defined by the configuration
-    langauge allows for a class of token which is not semantically understood
+    language allows for a class of token which is not semantically understood
     by the program. In general, this should not happen unless there is a bug
     caused by a mismatch between the grammar and the current code logic.
     """
