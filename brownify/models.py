@@ -33,9 +33,9 @@ class Track:
     throughout the processing stages.
 
     Args:
-        audio: Array containing the an sequence of audio data;
-        the first dimension represents time, and the second dimension (if
-        present) represents channels
+        audio: Array containing the an sequence of audio data; the first
+            dimension represents time, and the second dimension (if present)
+            represents channels
         num_channels: Number of channels in the audio data
         sample_rate: The rate at which the audio data was sampled
         save: Mark a track to be saved in the final merged file

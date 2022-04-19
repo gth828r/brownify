@@ -32,13 +32,13 @@ class YoutubeDownloader:
 
         Args:
             filename: The path to save the fetched aduio file to
-            file_type: Type of audio stream to fetch from
-            Youtube. Defaults to "mp4".
+            file_type: Type of audio stream to fetch from Youtube. Defaults
+                to "mp4".
             abr: Audio bitrate to look for on Youtube. Defaults to "128kbps".
 
         Raises:
             NoAudioStreamFoundError: If no audio stream can be found for the
-            provided URL given the provided file type and bitrate
+                provided URL given the provided file type and bitrate
         """
         streams = self.yt.streams.filter(
             only_audio=True, abr=abr, file_extension=file_type

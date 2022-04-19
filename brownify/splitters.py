@@ -26,7 +26,7 @@ class AudioSplitter(ABC):
 
         Args:
             filename (str): Path to the file which should be split into
-            multiple sources
+                multiple sources
         """
         self.separator.separate_to_file(filename, ".")
 
