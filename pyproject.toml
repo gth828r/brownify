@@ -15,3 +15,17 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.mypy]
+exclude = "docs"
+ignore_missing_imports = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unreachable = true
+
+[tool.pydocstyle]
+add_ignore = "D400"
