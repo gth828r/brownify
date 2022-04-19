@@ -22,7 +22,9 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: "3.8"
-          cache: "pip"
+          # Do not enable caching. The action currently only supports
+          # requirements.txt files, but our dependencies are in setup.cfg.
+          #cache: "pip"
 
       - name: Install libsndfile1
         run: sudo apt-get install -y libsndfile1
