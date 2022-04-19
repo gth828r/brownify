@@ -5,6 +5,11 @@
 # Required
 version: 2
 
+# Install libsndfile to support the python soundfile pip package
+build:
+  apt_packages:
+    - libsndfile1
+
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
    configuration: docs/source/conf.py
