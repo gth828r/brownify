@@ -1,8 +1,10 @@
+from typing import List, Union
+
+import pyparsing as pp
+
 from brownify.actions import Brownifier
 from brownify.errors import TokenNotInGrammarError, UnexpectedTokenTypeError
 from brownify.models import Pipeline
-import pyparsing as pp
-from typing import List, Union
 
 
 class ActionParser:
@@ -80,6 +82,9 @@ class ActionParser:
     def _is_connector(self, token: str) -> bool:
         return self._matches_parser_element(token, self._connector)
 
+    def _is_source(self, token: str) -> bool:
+        return self._matches_parser_element(token, self._source)
+
     def _is_sink(self, token: str) -> bool:
         return self._matches_parser_element(token, self._sink)
 
@@ -92,7 +97,7 @@ class ActionParser:
     @staticmethod
     def _split_into_expressions(
         program: pp.ParseResults,
-    ) -> List[Union[str, List[str]]]:
+    ) -> List[List[Union[str, List[str]]]]:
         pipeline_specs = []
         for expression in program.asList():
             if expression != ";":
@@ -106,9 +111,17 @@ class ActionParser:
         if len(expression) == 0:
             return None
 
-        source = expression[0]
+        if not isinstance(expression[0], str) or not self._is_source(
+            expression[0]
+        ):
+            raise UnexpectedTokenTypeError(
+                "The first element of an expression in a recipe must be a "
+                f"valid source, but got {expression[0]}."
+            )
+
+        source: str = expression[0]
         actions = []
-        sink = None
+        sink: Union[str, None] = None
         save = False
         for item in expression[1:]:
             # We need to handle both individual tokens and grouped tokens.
@@ -149,6 +162,11 @@ class ActionParser:
                 raise TokenNotInGrammarError(
                     f"Token {token} is not part of valid grammar"
                 )
+
+        if not isinstance(sink, str):
+            raise UnexpectedTokenTypeError(
+                f"No valid sink was provided in expression:\n{expression}"
+            )
 
         return Pipeline(source=source, actions=actions, sink=sink, save=save)
 

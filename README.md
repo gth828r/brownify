@@ -69,7 +69,7 @@ other -> save(other);
 piano -> save(piano);
 ```
 
-In the above example, the original vocals are duplicted and modified. The original vocals are not part of the final track. A temporary sink called lateBass is defined and used to create two versions of teh bass track. Note that "lateBass" is not part of the final track, as it does not include the `save` wrapper around the sink. However, it is used to define two tracks `flatBass` and `halfFlatBass` which are saved as part of the final track.
+In the above example, the original vocals are duplicted and modified. The original vocals are not part of the final track. A temporary sink called lateBass is defined and used to create two versions of the bass track. Note that "lateBass" is not part of the final track, as it does not include the `save` wrapper around the sink. However, it is used to define two tracks `flatBass` and `halfFlatBass` which are saved as part of the final track.
 
 When defining recipes, the following are available to you:
 
@@ -81,7 +81,7 @@ Original sources:
  - `vocals`: The vocal track split out by the audio splitter
 
 Names:
-Sinks must be named. Names are alpha-numeric with no punctuation or whitespace.
+Sinks must be named. Names are alphanumeric with no punctuation or whitespace.
 
 Defined sources:
 A defined source is a named sink which was already defined in a previous pipeline.

@@ -1,10 +1,12 @@
-from brownify.errors import NoPipelineSourceError
+from typing import Dict, List
+
+import soundfile as sf
+from pydub import AudioSegment
+from tqdm import tqdm
+
+from brownify.errors import InvalidInputError, NoPipelineSourceError
 from brownify.models import Pipeline, Track
 from brownify.splitters import AudioSplitter
-from pydub import AudioSegment
-import soundfile as sf
-from tqdm import tqdm
-from typing import Dict, List
 
 
 class PipelineProcessor:
@@ -95,16 +97,23 @@ class AudioMerger:
         Args:
             files: List of track sources to merge
 
+        Raises:
+            InvalidInputError: If no files were provided to merge, then this
+                is likely the result of a bad input recipe.
+
         Returns:
-            The overlayed tracks merged into an AudioSegment
+            The overlaid tracks merged into an AudioSegment
         """
-        merged = None
+        if len(files) == 0:
+            raise InvalidInputError(
+                "No files were provided to merge. There is likely an issue "
+                "with the input recipe."
+            )
+
+        merged = AudioSegment.from_wav(files[0])
         for f in tqdm(files, "Merging tracks..."):
             audio = AudioSegment.from_wav(f)
-            if merged:
-                merged = merged.overlay(audio)
-            else:
-                merged = audio
+            merged = merged.overlay(audio)
 
         return merged
 

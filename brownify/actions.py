@@ -1,6 +1,7 @@
-from brownify.models import Track
-import numpy as np
 import librosa
+import numpy as np
+
+from brownify.models import Track
 
 
 class Brownifier:

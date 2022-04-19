@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from spleeter.separator import Separator
 from typing import List
+
+from spleeter.separator import Separator
+
+from brownify.errors import InvalidInputError
 
 
 class AudioSplitter(ABC):
@@ -15,11 +18,15 @@ class AudioSplitter(ABC):
 
     @abstractmethod
     def _init_separator(self) -> None:
-        NotImplementedError
+        """Initialize the separator
+
+        Each concrete implementation of a separator must implement this method
+        to initialize its separator.
+        """
 
     @abstractmethod
     def get_channels(self) -> List[str]:
-        NotImplementedError
+        """Get the list of named of channels that the splitter will create"""
 
     def split(self, filename: str) -> None:
         """Split an audio file into multiple sources
@@ -138,3 +145,7 @@ class AudioSplitterFactory:
             return AudioSplitter4Channel()
         elif audio_splitter_type == AudioSplitterType.FIVE_STEM:
             return AudioSplitter5Channel()
+        else:
+            raise InvalidInputError(
+                f"Unknown splitter type provided: {audio_splitter_type}"
+            )

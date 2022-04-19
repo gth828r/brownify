@@ -1,5 +1,6 @@
-from brownify.errors import NoAudioStreamFoundError
 from pytube import YouTube
+
+from brownify.errors import NoAudioStreamFoundError
 
 
 class YoutubeDownloader:
