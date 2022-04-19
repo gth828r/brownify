@@ -45,13 +45,12 @@ class Brownifier:
         """Change the pitch of the track without changing the track speed
 
         Args:
-            track (Track): The track to modify
-            n_steps (int): Number of steps to modify by (positive or negative)
-            bins_per_octave (int, optional): Number of steps in an octave.
-            Defaults to 12.
+            track: The track to modify
+            n_steps: Number of steps to modify by (positive or negative)
+            bins_per_octave: Number of steps in an octave. Defaults to 12.
 
         Returns:
-            Track: The track with the pitch changed
+            The track with the pitch changed
         """
         if Brownifier._is_stereo(track):
             return Brownifier._change_pitch_stereo(
@@ -67,10 +66,10 @@ class Brownifier:
         """Make the track flat by one semitone
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now flat
+            The track which is now flat
         """
         return Brownifier.change_pitch(track, n_steps=-1)
 
@@ -79,10 +78,10 @@ class Brownifier:
         """Make the track sharp by one semitone
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now sharp
+            The track which is now sharp
         """
         return Brownifier.change_pitch(track, n_steps=1)
 
@@ -91,10 +90,10 @@ class Brownifier:
         """Make the track flat by one quarter tone
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now half-flat
+            The track which is now half-flat
         """
         return Brownifier.change_pitch(track, n_steps=-1, bins_per_octave=24)
 
@@ -103,10 +102,10 @@ class Brownifier:
         """Make the track sharp by one quarter tone
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now half-sharp
+            The track which is now half-sharp
         """
         return Brownifier.change_pitch(track, n_steps=1, bins_per_octave=24)
 
@@ -115,10 +114,10 @@ class Brownifier:
         """Move the track up by a full octave
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now an octave higher
+            The track which is now an octave higher
         """
         return Brownifier.change_pitch(track, n_steps=12)
 
@@ -127,10 +126,10 @@ class Brownifier:
         """Move the track down by a full octave
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now an octave lower
+            The track which is now an octave lower
         """
         return Brownifier.change_pitch(track, n_steps=-12)
 
@@ -143,11 +142,11 @@ class Brownifier:
         or vice-versa
 
         Args:
-            track (Track): The track to modify
-            steps (int): The number of samples to shift by
+            track: The track to modify
+            steps: The number of samples to shift by
 
         Returns:
-            Track: The track which has been shifted in time
+            The track which has been shifted in time
         """
         # FIXME: the API should be based on time and it should be calculated
         # based on the track's sample rate.
@@ -159,10 +158,10 @@ class Brownifier:
         """Shift the track forward in time by about a tenth of a second
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now early
+            The track which is now early
         """
         # FIXME: should be based on sample rate
         return Brownifier.time_shift(track, -1500)
@@ -172,10 +171,10 @@ class Brownifier:
         """Shift a track backward in time by about a tenth of a second
 
         Args:
-            track (Track): The track to modify
+            track: The track to modify
 
         Returns:
-            Track: The track which is now late
+            The track which is now late
         """
         # FIXME: should be based on sample rate
         track.audio = np.roll(track.audio, 1500)

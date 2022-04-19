@@ -14,7 +14,7 @@ class PipelineProcessor:
         self.tracks: Dict[str, Track] = {}
         self.target = target
         self._splitter = splitter
-        self._saved_files = []
+        self._saved_files: List[str] = []
         for channel in tqdm(
             splitter.get_channels(), "Loading split sources for processing..."
         ):
@@ -79,9 +79,8 @@ class PipelineProcessor:
         """Process a series of pipelines and output a processed audio file
 
         Args:
-            pipelines (List[Pipeline]): List of pipelines to apply to generate
-            an audio track
-            output_file (str): Path to output the track to
+            pipelines: List of pipelines to apply to generate an audio track
+            output_file: Path to output the track to
         """
         self._process(pipelines)
         self._save()
@@ -94,10 +93,10 @@ class AudioMerger:
         """Merge the list of audio sources into an AudioSegment
 
         Args:
-            files (List[str]): List of track sources to merge
+            files: List of track sources to merge
 
         Returns:
-            AudioSegment: The overlayed tracks merged into an AudioSegment
+            The overlayed tracks merged into an AudioSegment
         """
         merged = None
         for f in tqdm(files, "Merging tracks..."):
@@ -114,7 +113,7 @@ class AudioMerger:
         """Save the merged audio file
 
         Args:
-            filename (str): Path to use for the merged file
-            audio (AudioSegment): AudioSegment to save
+            filename: Path to use for the merged file
+            audio: AudioSegment to save
         """
         audio.export(filename, format="mp3")

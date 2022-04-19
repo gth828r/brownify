@@ -13,10 +13,10 @@ class Pipeline:
     track should be saved for merging.
 
     Args:
-        source (str): Name of an audio source
-        actions: (List[Callable]): Series of actions to apply to the source
-        sink: (str): New name for the processed audio
-        save: (bool): Mark a sink to be saved into the final merged file
+        source: Name of an audio source
+        actions: Series of actions to apply to the source
+        sink: New name for the processed audio
+        save: Mark a sink to be saved into the final merged file
     """
 
     source: str
@@ -33,12 +33,12 @@ class Track:
     throughout the processing stages.
 
     Args:
-        audio (numpy.ndarray): Array containing the an sequence of audio data;
+        audio: Array containing the an sequence of audio data;
         the first dimension represents time, and the second dimension (if
         present) represents channels
-        num_channels: (int): Number of channels in the audio data
-        sample_rate: (int): The rate at which the audio data was sampled
-        save: (bool): Mark a track to be saved in the final merged file
+        num_channels: Number of channels in the audio data
+        sample_rate: The rate at which the audio data was sampled
+        save: Mark a track to be saved in the final merged file
     """
 
     audio: np.ndarray
@@ -53,7 +53,7 @@ class Track:
         initialized to False
 
         Returns:
-            Track: A deep copy of the original track
+            A deep copy of the original track
         """
         return Track(
             audio=np.copy(self.audio),

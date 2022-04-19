@@ -156,10 +156,10 @@ class ActionParser:
         """Get audio processing pipelines given a recipe
 
         Args:
-            program (str): Recipe defining the steps to perform over the audio
+            program: Recipe defining the steps to perform over the audio
 
         Returns:
-            List[Pipeline]: Sequence of pipelines to be run
+            Sequence of pipelines to be run
         """
         parsed = self._pipelines.parseString(program)
         pipeline_exprs = self._split_into_expressions(parsed)
