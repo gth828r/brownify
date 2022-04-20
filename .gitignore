@@ -1,5 +1,6 @@
 *.mp3
 *.egg-info
+.coverage
 .env
 __pycache__/
 

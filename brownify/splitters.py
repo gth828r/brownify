@@ -59,7 +59,7 @@ class AudioSplitter5Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:5stems")
+        self.separator = Separator("spleeter:5stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS
@@ -85,7 +85,7 @@ class AudioSplitter4Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:4stems")
+        self.separator = Separator("spleeter:4stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS
@@ -108,7 +108,7 @@ class AudioSplitter2Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:2stems")
+        self.separator = Separator("spleeter:2stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS

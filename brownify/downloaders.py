@@ -20,11 +20,13 @@ class YoutubeDownloader:
         # FIXME: validate
 
     def __enter__(self):
-        self.yt = YouTube(self.url)
-        return self
+        self.yt = YouTube(
+            self.url
+        )  # pragma: no cover, this is an external operation
+        return self  # pragma: no cover
 
     def __exit__(self, exctype, excval, excbt):
-        pass
+        pass  # pragma: no cover
 
     def get_audio(
         self, filename: str, file_type: str = "mp4", abr: str = "128kbps"
