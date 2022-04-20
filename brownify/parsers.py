@@ -179,7 +179,7 @@ class ActionParser:
         Returns:
             Sequence of pipelines to be run
         """
-        parsed = self._pipelines.parseString(program)
+        parsed = self._pipelines.parseString(program, parseAll=True)
         pipeline_exprs = self._split_into_expressions(parsed)
 
         pipelines = []

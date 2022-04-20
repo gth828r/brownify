@@ -29,3 +29,8 @@ warn_unreachable = true
 
 [tool.pydocstyle]
 add_ignore = "D400"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  "ignore:the imp module is deprecated in favour of importlib:DeprecationWarning",
+]
