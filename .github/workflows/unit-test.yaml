@@ -39,6 +39,7 @@ jobs:
           set -xe
           export TOTAL=$(python -c "import json;print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
           echo "total=$TOTAL" >> $GITHUB_ENV
+          export PCTINT=$(echo $TOTAL | cut -f1 -d.)
           if (($PCTINT >= 95)); then echo "badge_color=green"; fi >> $GITHUB_ENV
           if (($PCTINT < 95)); then echo "badge_color=yellow"; fi >> $GITHUB_ENV
           if (($PCTINT < 85)); then echo "badge_color=orange"; fi >> $GITHUB_ENV
