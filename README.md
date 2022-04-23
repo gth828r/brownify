@@ -1,6 +1,14 @@
 # Brownify
 Brownify allows you to make your music brown. It splits audio tracks separate tracks for individual instruments, and it allows for performing basic modifications to those tracks. The tracks can then be recombined to help form a brown version of the original audio track.
 
+
+[![Documentation Status](https://readthedocs.org/projects/brownify/badge/?version=latest)](https://brownify.readthedocs.io/en/latest/?badge=latest)
+[![Unit Test Status](https://github.com/gth828r/brownify/actions/workflows/unit-test.yaml/badge.svg)](https://github.com/gth828r/brownify/actions/workflows/unit-test.yaml)
+![Unit Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gth828r/7ff98a6427455d600446981c55ac5b65/raw/coverage.json)
+[![End to End Test Status](https://github.com/gth828r/brownify/actions/workflows/end-to-end-test.yaml/badge.svg)](https://github.com/gth828r/brownify/actions/workflows/end-to-end-test.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 ## What is "brown" music?
 In some ways, that is up to you! But the terminology at least comes from the band Ween.
 
