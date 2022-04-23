@@ -29,4 +29,27 @@ jobs:
         run: pip install .[dev]
 
       - name: Run the test
-        run: pytest .
+        run: coverage run -m pytest
+
+      - name: Generate the report
+        run: coverage json
+
+      - name: Gather coverage badge details
+        run: |
+          set -xe
+          export TOTAL=$(python -c "import json;print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
+          echo "total=$TOTAL" >> $GITHUB_ENV
+          if (($PCTINT >= 95)); then echo "badge_color=green"; fi >> $GITHUB_ENV
+          if (($PCTINT < 95)); then echo "badge_color=yellow"; fi >> $GITHUB_ENV
+          if (($PCTINT < 85)); then echo "badge_color=orange"; fi >> $GITHUB_ENV
+          if (($PCTINT < 75)); then echo "badge_color=red"; fi >> $GITHUB_ENV
+
+      - name: "Create coverage badge"
+        uses: schneegans/dynamic-badges-action@v1.2.0
+        with:
+          auth: ${{ secrets.COV_GIST_SECRET }}
+          gistID: 7ff98a6427455d600446981c55ac5b65
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.total }}%
+          color: ${{ env.badge_color }}
