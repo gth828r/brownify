@@ -1,8 +1,9 @@
 from unittest import mock
 
 import pytest
+from spleeter import SpleeterError
 
-from brownify.errors import InvalidInputError
+from brownify.errors import InvalidInputError, SplittingError
 from brownify.splitters import (
     AudioSplitter2Channel,
     AudioSplitter4Channel,
@@ -60,7 +61,7 @@ def test_audio_splitter_factory_5_channel():
 
 # This is not useful yet, but we can improve this test and spin up similar
 # tests if we have more complex exception handling in the implementation.
-def test_audio_splitter_split(dummy_filename):
+def test_audio_splitter_split_success(dummy_filename):
     with mock.patch.object(
         AudioSplitter2Channel, "_init_separator", new=mock_init_separator
     ):
@@ -68,6 +69,19 @@ def test_audio_splitter_split(dummy_filename):
         splitter.separator = MockSeparator()
         splitter.separator.separate_to_file = mock.MagicMock()
         splitter.split(dummy_filename)
+
+
+def test_audio_splitter_split_failure(dummy_filename):
+    with mock.patch.object(
+        AudioSplitter2Channel, "_init_separator", new=mock_init_separator
+    ):
+        splitter = AudioSplitter2Channel()
+        splitter.separator = MockSeparator()
+        splitter.separator.separate_to_file = mock.MagicMock(
+            side_effect=SpleeterError("Could not split")
+        )
+        with pytest.raises(SplittingError):
+            splitter.split(dummy_filename)
 
 
 def test_audio_splitter_factory_failure():

@@ -1,7 +1,6 @@
-import pyparsing as pp
 import pytest
 
-from brownify.errors import UnexpectedTokenTypeError
+from brownify.errors import InvalidInputError, UnexpectedTokenTypeError
 from brownify.parsers import ActionParser
 
 
@@ -102,13 +101,13 @@ def test_get_pipelines_whitespace(
 
 def test_get_pipelines_missing_semicolon(missing_semicolon_program):
     parser = ActionParser()
-    with pytest.raises(pp.ParseException):
+    with pytest.raises(InvalidInputError):
         parser.get_pipelines(missing_semicolon_program)
 
 
 def test_get_pipelines_missing_source(missing_source_program):
     parser = ActionParser()
-    with pytest.raises(pp.ParseException):
+    with pytest.raises(InvalidInputError):
         parser.get_pipelines(missing_source_program)
 
 
@@ -120,5 +119,5 @@ def test_get_pipelines_missing_sink(missing_sink_program):
 
 def test_get_pipelines_invalid_action(invalid_action_program):
     parser = ActionParser()
-    with pytest.raises(pp.ParseException):
+    with pytest.raises(InvalidInputError):
         parser.get_pipelines(invalid_action_program)

@@ -3,7 +3,11 @@ from typing import List, Union
 import pyparsing as pp
 
 from brownify.actions import Brownifier
-from brownify.errors import TokenNotInGrammarError, UnexpectedTokenTypeError
+from brownify.errors import (
+    InvalidInputError,
+    TokenNotInGrammarError,
+    UnexpectedTokenTypeError,
+)
 from brownify.models import Pipeline
 
 
@@ -176,10 +180,20 @@ class ActionParser:
         Args:
             program: Recipe defining the steps to perform over the audio
 
+        Raises:
+            InvalidInputError: If an invalid recipe is provided
+
         Returns:
             Sequence of pipelines to be run
         """
-        parsed = self._pipelines.parseString(program, parseAll=True)
+        try:
+            parsed = self._pipelines.parseString(program, parseAll=True)
+        except pp.ParseException as pe:
+            raise InvalidInputError(
+                f"Invalid recipe: See line {pe.lineno} column {pe.col}\n"
+                f"Details: {pe}"
+            )
+
         pipeline_exprs = self._split_into_expressions(parsed)
 
         pipelines = []
