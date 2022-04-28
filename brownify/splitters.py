@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import List
 
+from spleeter import SpleeterError
 from spleeter.separator import Separator
 
-from brownify.errors import InvalidInputError
+from brownify.errors import InvalidInputError, SplittingError
 
 
 class AudioSplitter(ABC):
@@ -34,8 +35,15 @@ class AudioSplitter(ABC):
         Args:
             filename (str): Path to the file which should be split into
                 multiple sources
+
+        Raises:
+            SplittingError: If unable to perform the operation of splitting
+                into multiple tracks
         """
-        self.separator.separate_to_file(filename, ".")
+        try:
+            self.separator.separate_to_file(filename, ".")
+        except SpleeterError:
+            raise SplittingError("Unable to split into separate tracks")
 
 
 class AudioSplitter5Channel(AudioSplitter):

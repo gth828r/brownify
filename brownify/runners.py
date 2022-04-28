@@ -2,9 +2,14 @@ from typing import Dict, List
 
 import soundfile as sf
 from pydub import AudioSegment
+from pydub.exceptions import PydubException
 from tqdm import tqdm
 
-from brownify.errors import InvalidInputError, NoPipelineSourceError
+from brownify.errors import (
+    InvalidInputError,
+    MergingError,
+    NoPipelineSourceError,
+)
 from brownify.models import Pipeline, Track
 from brownify.splitters import AudioSplitter
 
@@ -100,6 +105,7 @@ class AudioMerger:
         Raises:
             InvalidInputError: If no files were provided to merge, then this
                 is likely the result of a bad input recipe.
+            MergingError: If the tracks are unabled to be merged
 
         Returns:
             The overlaid tracks merged into an AudioSegment
@@ -110,12 +116,19 @@ class AudioMerger:
                 "with the input recipe."
             )
 
-        merged = AudioSegment.from_wav(files[0])
-        for f in tqdm(files, "Merging tracks..."):
-            audio = AudioSegment.from_wav(f)
-            merged = merged.overlay(audio)
+        try:
+            merged = AudioSegment.from_wav(files[0])
 
-        return merged
+            if len(files) > 1:
+                for f in tqdm(files[1:], "Merging tracks..."):
+                    audio = AudioSegment.from_wav(f)
+                    merged = merged.overlay(audio)
+
+            return merged
+        except PydubException:
+            raise MergingError(
+                f"Unable to combine tracks backed by files: {files}"
+            )
 
     @staticmethod
     def save_file(filename: str, audio: AudioSegment) -> None:
@@ -124,5 +137,13 @@ class AudioMerger:
         Args:
             filename: Path to use for the merged file
             audio: AudioSegment to save
+
+        Raises:
+            MergingError: If unable to save the merged track
         """
-        audio.export(filename, format="mp3")
+        try:
+            audio.export(filename, format="mp3")
+        except PydubException:
+            raise MergingError(
+                f"Unable to save merged track to file {filename}"
+            )
