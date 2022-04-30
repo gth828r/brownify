@@ -26,8 +26,17 @@ jobs:
           # requirements.txt files, but our dependencies are in setup.cfg.
           #cache: "pip"
 
+      # Set up CUDA for Spleeter's Tensorflow install
+      - uses: Jimver/cuda-toolkit@v0.2.5
+        id: cuda-toolkit
+        with:
+          cuda: '11.5.1'
+
       - name: Install libsndfile1
         run: sudo apt-get install -y libsndfile1
+
+      - name: Install ffmpeg
+        run: sudo apt-get install -y ffmpeg
 
       - name: Install brownify package
         run: pip install .
