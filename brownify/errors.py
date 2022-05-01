@@ -2,8 +2,24 @@ class BrownifyError(Exception):
     """Generic error for brownify"""
 
 
+class DownloadError(BrownifyError):
+    """Error raised when unable to download an audio stream
+
+    DownloadError is raised when a downloader fails to fetch audio desired by
+    the caller.
+    """
+
+
 class InvalidInputError(BrownifyError):
     """Error raised when invalid user input provided to brownify"""
+
+
+class MergingError(BrownifyError):
+    """Error raised when an error occurs during audio merging
+
+    MergingError should be raised when an error occurs while merging multiple
+    separate tracks into a final track.
+    """
 
 
 class NoAudioStreamFoundError(BrownifyError):
@@ -20,7 +36,7 @@ class UnexpectedTokenTypeError(BrownifyError):
     UnexpectedTokenTypeError should be raised when performing post-processing
     steps over input which has already been processed by the grammar. It is
     used to catch issues where the syntax defined by the configuration
-    langauge allows for a class of token which is not semantically understood
+    language allows for a class of token which is not semantically understood
     by the program. In general, this should not happen unless there is a bug
     caused by a mismatch between the grammar and the current code logic.
     """
@@ -35,6 +51,14 @@ class TokenNotInGrammarError(BrownifyError):
     post-processing code does not match the expected syntax of the grammar.
     In general, this should not happen unless there is a bug caused by a
     mismatch between the grammar and the current code logic.
+    """
+
+
+class SplittingError(BrownifyError):
+    """Error raised when unable to split a track into multiple tracks
+
+    SplitterError is raised when an error is detected during the splitting
+    process.
     """
 
 

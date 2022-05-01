@@ -1,5 +1,6 @@
-from brownify.errors import NoAudioStreamFoundError
 from pytube import YouTube
+
+from brownify.errors import NoAudioStreamFoundError
 
 
 class YoutubeDownloader:
@@ -13,17 +14,19 @@ class YoutubeDownloader:
         """Create a YoutubeDownloader
 
         Args:
-            url (str): Complete URL to a Youtube video
+            url: Complete URL to a Youtube video
         """
         self.url = url
         # FIXME: validate
 
     def __enter__(self):
-        self.yt = YouTube(self.url)
-        return self
+        self.yt = YouTube(
+            self.url
+        )  # pragma: no cover, this is an external operation
+        return self  # pragma: no cover
 
     def __exit__(self, exctype, excval, excbt):
-        pass
+        pass  # pragma: no cover
 
     def get_audio(
         self, filename: str, file_type: str = "mp4", abr: str = "128kbps"
@@ -31,15 +34,14 @@ class YoutubeDownloader:
         """Method to fetch the audio file
 
         Args:
-            filename (str): The path to save the fetched aduio file to
-            file_type (str, optional): Type of audio stream to fetch from
-            Youtube. Defaults to "mp4".
-            abr (str, optional): Audio bitrate to look for on Youtube.
-            Defaults to "128kbps".
+            filename: The path to save the fetched aduio file to
+            file_type: Type of audio stream to fetch from Youtube. Defaults
+                to "mp4".
+            abr: Audio bitrate to look for on Youtube. Defaults to "128kbps".
 
         Raises:
             NoAudioStreamFoundError: If no audio stream can be found for the
-            provided URL given the provided file type and bitrate
+                provided URL given the provided file type and bitrate
         """
         streams = self.yt.streams.filter(
             only_audio=True, abr=abr, file_extension=file_type

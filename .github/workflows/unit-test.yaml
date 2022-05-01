@@ -1,0 +1,56 @@
+name: Unit test
+
+on:
+  # Run reach time there is a push to develop or main
+  push:
+    branches: [develop, main]
+
+  # Run each time there is a pull request to develop
+  pull_request:
+    branches: [develop]
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+          # Do not enable caching. The action currently only supports
+          # requirements.txt files, but our dependencies are in setup.cfg.
+          #cache: "pip"
+
+      - name: Install libsndfile1
+        run: sudo apt-get install -y libsndfile1
+
+      - name: Install brownify package
+        run: pip install .[dev]
+
+      - name: Run the test
+        run: coverage run -m pytest
+
+      - name: Generate the report
+        run: coverage json
+
+      - name: Gather coverage badge details
+        run: |
+          set -xe
+          export TOTAL=$(python -c "import json;print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
+          echo "total=$TOTAL" >> $GITHUB_ENV
+          export PCTINT=$(echo $TOTAL | cut -f1 -d.)
+          if (($PCTINT >= 95)); then echo "badge_color=green"; fi >> $GITHUB_ENV
+          if (($PCTINT < 95)); then echo "badge_color=yellow"; fi >> $GITHUB_ENV
+          if (($PCTINT < 85)); then echo "badge_color=orange"; fi >> $GITHUB_ENV
+          if (($PCTINT < 75)); then echo "badge_color=red"; fi >> $GITHUB_ENV
+
+      - name: "Create coverage badge"
+        uses: schneegans/dynamic-badges-action@v1.2.0
+        with:
+          auth: ${{ secrets.COV_GIST_SECRET }}
+          gistID: 7ff98a6427455d600446981c55ac5b65
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.total }}%
+          color: ${{ env.badge_color }}

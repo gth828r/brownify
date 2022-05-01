@@ -1,7 +1,11 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from spleeter.separator import Separator
 from typing import List
+
+from spleeter import SpleeterError
+from spleeter.separator import Separator
+
+from brownify.errors import InvalidInputError, SplittingError
 
 
 class AudioSplitter(ABC):
@@ -15,20 +19,31 @@ class AudioSplitter(ABC):
 
     @abstractmethod
     def _init_separator(self) -> None:
-        NotImplementedError
+        """Initialize the separator
+
+        Each concrete implementation of a separator must implement this method
+        to initialize its separator.
+        """
 
     @abstractmethod
     def get_channels(self) -> List[str]:
-        NotImplementedError
+        """Get the list of named of channels that the splitter will create"""
 
     def split(self, filename: str) -> None:
         """Split an audio file into multiple sources
 
         Args:
             filename (str): Path to the file which should be split into
-            multiple sources
+                multiple sources
+
+        Raises:
+            SplittingError: If unable to perform the operation of splitting
+                into multiple tracks
         """
-        self.separator.separate_to_file(filename, ".")
+        try:
+            self.separator.separate_to_file(filename, ".")
+        except SpleeterError:
+            raise SplittingError("Unable to split into separate tracks")
 
 
 class AudioSplitter5Channel(AudioSplitter):
@@ -52,7 +67,7 @@ class AudioSplitter5Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:5stems")
+        self.separator = Separator("spleeter:5stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS
@@ -78,7 +93,7 @@ class AudioSplitter4Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:4stems")
+        self.separator = Separator("spleeter:4stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS
@@ -101,7 +116,7 @@ class AudioSplitter2Channel(AudioSplitter):
         self._init_separator()
 
     def _init_separator(self) -> None:
-        self.separator = Separator("spleeter:2stems")
+        self.separator = Separator("spleeter:2stems")  # pragma: no cover
 
     def get_channels(self) -> List[str]:
         return self.CHANNELS
@@ -138,3 +153,7 @@ class AudioSplitterFactory:
             return AudioSplitter4Channel()
         elif audio_splitter_type == AudioSplitterType.FIVE_STEM:
             return AudioSplitter5Channel()
+        else:
+            raise InvalidInputError(
+                f"Unknown splitter type provided: {audio_splitter_type}"
+            )

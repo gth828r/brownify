@@ -1,14 +1,14 @@
 import argparse
-from brownify.downloaders import YoutubeDownloader
-from brownify.errors import BrownifyError, InvalidInputError
-from brownify.parsers import ActionParser
-from brownify.splitters import AudioSplitterFactory, AudioSplitterType
-from brownify.runners import PipelineProcessor
 import logging
 import os
 import shutil
 import uuid
 
+from brownify.downloaders import YoutubeDownloader
+from brownify.errors import BrownifyError, InvalidInputError
+from brownify.parsers import ActionParser
+from brownify.runners import PipelineProcessor
+from brownify.splitters import AudioSplitterFactory, AudioSplitterType
 
 _LOG_LEVELS = {"debug", "info", "warning", "error", "critical"}
 _DEFAULT_LOG_LEVEL = "warning"
@@ -33,9 +33,7 @@ def get_args() -> argparse.Namespace:
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--recipe", help="Sequence to apply to audio streams")
-    group.add_argument(
-        "--recipe-file", help="Path to an existing recipe file"
-    )
+    group.add_argument("--recipe-file", help="Path to an existing recipe file")
 
     return parser.parse_args()
 
@@ -57,7 +55,9 @@ def _get_program(recipe, recipe_file) -> str:
             program = f.read().replace("\n", "")
             return program
 
-    raise InvalidInputError("Either a recipe or a recipe file must be provided")
+    raise InvalidInputError(
+        "Either a recipe or a recipe file must be provided"
+    )
 
 
 def _cleanup(downloaded_file, session_id):
@@ -73,7 +73,10 @@ def _cleanup(downloaded_file, session_id):
         # file's base name
         shutil.rmtree(str(session_id))
     except OSError as ose:
-        logging.warning(f"Could not remove intermediate processed files under directory {session_id}/")
+        logging.warning(
+            "Could not remove intermediate processed files under directory "
+            f"{session_id}/"
+        )
         logging.debug(ose, exc_info=True)
 
 
@@ -133,6 +136,7 @@ def main() -> int:
         return 1
 
     finally:
-        # Clean up temporary files unless they have been marked for preservation
+        # Clean up temporary files unless they have been marked for
+        # preservation
         if not preserve:
             _cleanup(downloaded_file, session_id)

@@ -1,6 +1,14 @@
 # Brownify
 Brownify allows you to make your music brown. It splits audio tracks separate tracks for individual instruments, and it allows for performing basic modifications to those tracks. The tracks can then be recombined to help form a brown version of the original audio track.
 
+
+[![Documentation Status](https://readthedocs.org/projects/brownify/badge/?version=latest)](https://brownify.readthedocs.io/en/latest/?badge=latest)
+[![Unit Test Status](https://github.com/gth828r/brownify/actions/workflows/unit-test.yaml/badge.svg)](https://github.com/gth828r/brownify/actions/workflows/unit-test.yaml)
+![Unit Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gth828r/7ff98a6427455d600446981c55ac5b65/raw/coverage.json)
+[![End to End Test Status](https://github.com/gth828r/brownify/actions/workflows/end-to-end-test.yaml/badge.svg)](https://github.com/gth828r/brownify/actions/workflows/end-to-end-test.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 ## What is "brown" music?
 In some ways, that is up to you! But the terminology at least comes from the band Ween.
 
@@ -69,7 +77,7 @@ other -> save(other);
 piano -> save(piano);
 ```
 
-In the above example, the original vocals are duplicted and modified. The original vocals are not part of the final track. A temporary sink called lateBass is defined and used to create two versions of teh bass track. Note that "lateBass" is not part of the final track, as it does not include the `save` wrapper around the sink. However, it is used to define two tracks `flatBass` and `halfFlatBass` which are saved as part of the final track.
+In the above example, the original vocals are duplicted and modified. The original vocals are not part of the final track. A temporary sink called lateBass is defined and used to create two versions of the bass track. Note that "lateBass" is not part of the final track, as it does not include the `save` wrapper around the sink. However, it is used to define two tracks `flatBass` and `halfFlatBass` which are saved as part of the final track.
 
 When defining recipes, the following are available to you:
 
@@ -81,7 +89,7 @@ Original sources:
  - `vocals`: The vocal track split out by the audio splitter
 
 Names:
-Sinks must be named. Names are alpha-numeric with no punctuation or whitespace.
+Sinks must be named. Names are alphanumeric with no punctuation or whitespace.
 
 Defined sources:
 A defined source is a named sink which was already defined in a previous pipeline.
@@ -120,4 +128,4 @@ brownify https://www.youtube.com/watch?v=B4RqeAvE7iA boognish-christmas.mp3 --re
 The result of this command is a file `boognish-christmas.mp3` located in the current directory.
 
 ## Python API
-The python documentation will be published as part of the v0.1.1 release.
+The python documentation for the latest release can be found [here.](https://brownify.readthedocs.io/en/latest/brownify.html)

@@ -1,0 +1,48 @@
+name: End to end test
+
+on:
+  # Run reach time there is a push to develop or main
+  push:
+    branches: [develop, main]
+
+  # Run each time there is a pull request to develop
+  pull_request:
+    branches: [develop]
+
+  # Run once a day at a somewhat arbitrary time
+  schedule:
+    - cron: "27 3 * * *"
+
+jobs:
+  end_to_end_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+          # Do not enable caching. The action currently only supports
+          # requirements.txt files, but our dependencies are in setup.cfg.
+          #cache: "pip"
+
+      # Set up CUDA for Spleeter's Tensorflow install
+      #- uses: Jimver/cuda-toolkit@v0.2.5
+      #  id: cuda-toolkit
+      #  with:
+      #    cuda: '11.5.1'
+
+      - name: Install libsndfile1
+        run: sudo apt-get install -y libsndfile1
+
+      - name: Install ffmpeg
+        run: sudo apt-get install -y ffmpeg
+
+      - name: Install brownify package
+        run: pip install .
+
+      - name: Run the test
+        run: |
+          GITHUB_REPOSITORY=${{ env.GITHUB_REPOSITORY }} /bin/bash tests/end-to-end/test.sh -c
+        env:
+          GITHUB_REPOSITORY: deezer/spleeter

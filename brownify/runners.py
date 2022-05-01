@@ -1,10 +1,17 @@
-from brownify.errors import NoPipelineSourceError
+from typing import Dict, List
+
+import soundfile as sf
+from pydub import AudioSegment
+from pydub.exceptions import PydubException
+from tqdm import tqdm
+
+from brownify.errors import (
+    InvalidInputError,
+    MergingError,
+    NoPipelineSourceError,
+)
 from brownify.models import Pipeline, Track
 from brownify.splitters import AudioSplitter
-from pydub import AudioSegment
-import soundfile as sf
-from tqdm import tqdm
-from typing import Dict, List
 
 
 class PipelineProcessor:
@@ -14,7 +21,7 @@ class PipelineProcessor:
         self.tracks: Dict[str, Track] = {}
         self.target = target
         self._splitter = splitter
-        self._saved_files = []
+        self._saved_files: List[str] = []
         for channel in tqdm(
             splitter.get_channels(), "Loading split sources for processing..."
         ):
@@ -79,9 +86,8 @@ class PipelineProcessor:
         """Process a series of pipelines and output a processed audio file
 
         Args:
-            pipelines (List[Pipeline]): List of pipelines to apply to generate
-            an audio track
-            output_file (str): Path to output the track to
+            pipelines: List of pipelines to apply to generate an audio track
+            output_file: Path to output the track to
         """
         self._process(pipelines)
         self._save()
@@ -94,27 +100,50 @@ class AudioMerger:
         """Merge the list of audio sources into an AudioSegment
 
         Args:
-            files (List[str]): List of track sources to merge
+            files: List of track sources to merge
+
+        Raises:
+            InvalidInputError: If no files were provided to merge, then this
+                is likely the result of a bad input recipe.
+            MergingError: If the tracks are unabled to be merged
 
         Returns:
-            AudioSegment: The overlayed tracks merged into an AudioSegment
+            The overlaid tracks merged into an AudioSegment
         """
-        merged = None
-        for f in tqdm(files, "Merging tracks..."):
-            audio = AudioSegment.from_wav(f)
-            if merged:
-                merged = merged.overlay(audio)
-            else:
-                merged = audio
+        if len(files) == 0:
+            raise InvalidInputError(
+                "No files were provided to merge. There is likely an issue "
+                "with the input recipe."
+            )
 
-        return merged
+        try:
+            merged = AudioSegment.from_wav(files[0])
+
+            if len(files) > 1:
+                for f in tqdm(files[1:], "Merging tracks..."):
+                    audio = AudioSegment.from_wav(f)
+                    merged = merged.overlay(audio)
+
+            return merged
+        except PydubException:
+            raise MergingError(
+                f"Unable to combine tracks backed by files: {files}"
+            )
 
     @staticmethod
     def save_file(filename: str, audio: AudioSegment) -> None:
         """Save the merged audio file
 
         Args:
-            filename (str): Path to use for the merged file
-            audio (AudioSegment): AudioSegment to save
+            filename: Path to use for the merged file
+            audio: AudioSegment to save
+
+        Raises:
+            MergingError: If unable to save the merged track
         """
-        audio.export(filename, format="mp3")
+        try:
+            audio.export(filename, format="mp3")
+        except PydubException:
+            raise MergingError(
+                f"Unable to save merged track to file {filename}"
+            )
