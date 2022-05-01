@@ -44,4 +44,4 @@ jobs:
       - name: Run the test
         run: /bin/bash tests/end-to-end/test.sh -c
         env:
-            GITHUB_REPOSITORY=deezer/spleeter
+          GITHUB_REPOSITORY: deezer/spleeter
