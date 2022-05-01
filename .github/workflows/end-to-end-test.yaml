@@ -41,5 +41,10 @@ jobs:
       - name: Install brownify package
         run: pip install .
 
+      - name: Set environment variables for Spleeter
+        run: |
+            set -xe
+            export GITHUB_REPOSITORY=deezer/spleeter
+
       - name: Run the test
         run: /bin/bash tests/end-to-end/test.sh -c
