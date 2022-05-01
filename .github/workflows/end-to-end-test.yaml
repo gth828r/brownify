@@ -42,6 +42,9 @@ jobs:
         run: pip install .
 
       - name: Run the test
-        run: /bin/bash tests/end-to-end/test.sh -c
+        run: |
+          echo "GH: ${{ env.GITHUB_REPOSITORY }}"
+          echo "Shell: $GITHUB_REPOSITORY"
+          /bin/bash tests/end-to-end/test.sh -c
         env:
           GITHUB_REPOSITORY: deezer/spleeter
