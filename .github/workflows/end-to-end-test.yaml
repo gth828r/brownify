@@ -43,8 +43,6 @@ jobs:
 
       - name: Run the test
         run: |
-          echo "GH: ${{ env.GITHUB_REPOSITORY }}"
-          echo "Shell: $GITHUB_REPOSITORY"
-          /bin/bash tests/end-to-end/test.sh -c
+          GITHUB_REPOSITORY=${{ env.GITHUB_REPOSITORY }} /bin/bash tests/end-to-end/test.sh -c
         env:
           GITHUB_REPOSITORY: deezer/spleeter
