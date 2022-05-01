@@ -27,10 +27,10 @@ jobs:
           #cache: "pip"
 
       # Set up CUDA for Spleeter's Tensorflow install
-      - uses: Jimver/cuda-toolkit@v0.2.5
-        id: cuda-toolkit
-        with:
-          cuda: '11.5.1'
+      #- uses: Jimver/cuda-toolkit@v0.2.5
+      #  id: cuda-toolkit
+      #  with:
+      #    cuda: '11.5.1'
 
       - name: Install libsndfile1
         run: sudo apt-get install -y libsndfile1
@@ -41,10 +41,7 @@ jobs:
       - name: Install brownify package
         run: pip install .
 
-      - name: Set environment variables for Spleeter
-        run: |
-            set -xe
-            export GITHUB_REPOSITORY=deezer/spleeter
-
       - name: Run the test
         run: /bin/bash tests/end-to-end/test.sh -c
+        env:
+            GITHUB_REPOSITORY=deezer/spleeter
