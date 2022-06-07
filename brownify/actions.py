@@ -135,7 +135,7 @@ class Brownifier:
         return Brownifier.change_pitch(track, n_steps=-12)
 
     @staticmethod
-    def time_shift(track: Track, steps: int) -> Track:
+    def time_shift(track: Track, seconds_shift: float) -> Track:
         """Shift the track forward or backward in time
 
         The track is shifted forward or backward in time by rolling the
@@ -144,19 +144,20 @@ class Brownifier:
 
         Args:
             track: The track to modify
-            steps: The number of samples to shift by
+            seconds_shift: The number of seconds to shift by
 
         Returns:
             The track which has been shifted in time
         """
-        # FIXME: the API should be based on time and it should be calculated
-        # based on the track's sample rate.
-        track.audio = np.roll(track.audio, steps)
+        seconds_per_sample = 1 / track.sample_rate
+        samples_shift = round(seconds_shift / seconds_per_sample)
+
+        track.audio = np.roll(track.audio, samples_shift)
         return track
 
     @staticmethod
     def early(track: Track) -> Track:
-        """Shift the track forward in time by about a tenth of a second
+        """Shift the track forward in time by about a 35 milliseconds
 
         Args:
             track: The track to modify
@@ -164,12 +165,11 @@ class Brownifier:
         Returns:
             The track which is now early
         """
-        # FIXME: should be based on sample rate
-        return Brownifier.time_shift(track, -1500)
+        return Brownifier.time_shift(track, -0.035)
 
     @staticmethod
     def late(track: Track) -> Track:
-        """Shift a track backward in time by about a tenth of a second
+        """Shift a track backward in time by about a 35 milliseconds
 
         Args:
             track: The track to modify
@@ -177,6 +177,4 @@ class Brownifier:
         Returns:
             The track which is now late
         """
-        # FIXME: should be based on sample rate
-        track.audio = np.roll(track.audio, 1500)
-        return track
+        return Brownifier.time_shift(track, 0.035)
