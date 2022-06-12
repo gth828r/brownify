@@ -22,6 +22,9 @@ jobs:
           # requirements.txt files, but our dependencies are in setup.cfg.
           #cache: "pip"
 
+      - name: Update apt
+        run: sudo apt-get update
+
       - name: Install libsndfile1
         run: sudo apt-get install -y libsndfile1
 
