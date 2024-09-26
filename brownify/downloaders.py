@@ -1,4 +1,4 @@
-from pytube import YouTube
+import yt_dlp
 
 from brownify.errors import NoAudioStreamFoundError
 
@@ -10,45 +10,32 @@ class YoutubeDownloader:
     Youtube links.
     """
 
-    def __init__(self, url: str):
-        """Create a YoutubeDownloader
-
-        Args:
-            url: Complete URL to a Youtube video
-        """
-        self.url = url
-        # FIXME: validate
-
-    def __enter__(self):
-        self.yt = YouTube(
-            self.url
-        )  # pragma: no cover, this is an external operation
-        return self  # pragma: no cover
-
-    def __exit__(self, exctype, excval, excbt):
-        pass  # pragma: no cover
-
+    @staticmethod
     def get_audio(
-        self, filename: str, file_type: str = "mp4", abr: str = "128kbps"
+        url: str,
+        filename: str,
     ) -> None:
         """Method to fetch the audio file
 
         Args:
-            filename: The path to save the fetched aduio file to
-            file_type: Type of audio stream to fetch from Youtube. Defaults
-                to "mp4".
-            abr: Audio bitrate to look for on Youtube. Defaults to "128kbps".
+            url: URL for the YouTube video to download audio from
+            filename: The path to save the fetched aduio file to. This
+            must include an extension such as ".mp3" to fetch an audio file
+            from youtube.
 
         Raises:
             NoAudioStreamFoundError: If no audio stream can be found for the
                 provided URL given the provided file type and bitrate
         """
-        streams = self.yt.streams.filter(
-            only_audio=True, abr=abr, file_extension=file_type
-        )
-        if len(streams) == 0:
-            raise NoAudioStreamFoundError(
-                f"No audio stream found at {self.url}"
-            )
-
-        streams[0].download(filename=filename)
+        options = {
+            "extract_audio": True,
+            "format": "bestaudio",
+            "outtmpl": f"{filename}",
+        }
+        with yt_dlp.YoutubeDL(options) as downloader:
+            try:
+                downloader.download(url)
+            except yt_dlp.utils.DownloadError:
+                raise NoAudioStreamFoundError(
+                    f"No audio stream found at {url}"
+                )
