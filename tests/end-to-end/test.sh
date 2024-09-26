@@ -11,7 +11,7 @@ NC="\033[0m"
 log_path=${test_abs_dir}/test.log
 recipe_path=${test_abs_dir}/../../recipes/boognish-brown
 # The following is a creative commons licensed song
-local_file=samples/christmas.mp3
+local_file=${test_abs_dir}/../../samples/christmas.mp3
 workspace=${test_abs_dir}/workspace
 set_c=
 set_l=
