@@ -8,6 +8,8 @@ version: 2
 # Install libsndfile to support the python soundfile pip package
 build:
   os: ubuntu-22.04
+  tools:
+    python: "3.8"
   apt_packages:
     - libsndfile1
 
@@ -17,7 +19,6 @@ sphinx:
 
 # Optionally set the version of Python and requirements required to build your docs
 python:
-  version: "3.8"
   install:
     - method: pip
       path: .
