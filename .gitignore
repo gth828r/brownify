@@ -1,4 +1,6 @@
 *.mp3
+!samples/christmas.mp3
+*.mp4
 *.egg-info
 .coverage
 .env
