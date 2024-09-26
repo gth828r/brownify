@@ -113,8 +113,7 @@ def main() -> int:
         pipelines = ap.get_pipelines(program)
 
         # Grab an audio file based on the provided inputs
-        with YoutubeDownloader(youtube_url) as ytd:
-            ytd.get_audio(downloaded_file, file_type="mp4")
+        YoutubeDownloader.get_audio(youtube_url, downloaded_file)
 
         # Split the input audio into different tracks
         splitter = AudioSplitterFactory.get_audio_splitter(
