@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import uuid
+from typing import Optional
 
 from brownify.downloaders import YoutubeDownloader
 from brownify.errors import BrownifyError, InvalidInputError
@@ -16,7 +17,14 @@ _DEFAULT_LOG_LEVEL = "warning"
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Make your music brown")
-    parser.add_argument("youtube", help="URL for a youtube video")
+
+    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group.add_argument(
+        "--youtube-input", help="URL for a youtube video to use as input"
+    )
+    input_group.add_argument(
+        "--local-input", help="Path to a local file to use as input"
+    )
     parser.add_argument(
         "output", help="Filename to send output to (will be an mp3)"
     )
@@ -62,7 +70,7 @@ def _get_program(recipe, recipe_file) -> str:
 
 def _cleanup(downloaded_file, session_id):
     try:
-        # Clean the intermediate downloaded file
+        # Clean the intermediate downloaded file if it exists
         os.remove(downloaded_file)
     except OSError as ose:
         logging.warning(f"Could not remove downloaded file {downloaded_file}")
@@ -83,7 +91,8 @@ def _cleanup(downloaded_file, session_id):
 def main() -> int:
     args = get_args()
 
-    youtube_url = args.youtube
+    youtube_url: Optional[str] = args.youtube_input
+    local_file: Optional[str] = args.local_input
     output_file = args.output
     log_level = args.log.upper()
     preserve = args.preserve
@@ -101,8 +110,9 @@ def main() -> int:
     # Create a random ID for tracking this session
     session_id = str(uuid.uuid4())
 
-    # Create downloaded filename based on session ID
-    downloaded_file = f"{session_id}.mp4"
+    # Declare input filename to be set by either the local file
+    # or by downloading an audio file from youtube
+    input_file: Optional[str] = None
 
     try:
         # Get the program from user input
@@ -113,13 +123,27 @@ def main() -> int:
         pipelines = ap.get_pipelines(program)
 
         # Grab an audio file based on the provided inputs
-        YoutubeDownloader.get_audio(youtube_url, downloaded_file)
+        if youtube_url is not None:
+            # Create download filename based on session ID
+            download_file = f"{session_id}.mp4"
+            YoutubeDownloader.get_audio(youtube_url, download_file)
+            input_file = download_file
+        elif local_file is not None:
+            _, local_file_ext = os.path.splitext(local_file)
+            input_file = f"{session_id}{local_file_ext}"
+            # Create a symlink to the local file for this session
+            os.symlink(local_file, input_file)
+        else:
+            raise InvalidInputError(
+                "For audio input, a path to a local file or a youtube URL "
+                "must be provided"
+            )
 
         # Split the input audio into different tracks
         splitter = AudioSplitterFactory.get_audio_splitter(
             AudioSplitterType.FIVE_STEM
         )
-        splitter.split(downloaded_file)
+        splitter.split(input_file)
 
         # Perform processing pipeline over the audio
         processor = PipelineProcessor(session_id, splitter)
@@ -138,4 +162,4 @@ def main() -> int:
         # Clean up temporary files unless they have been marked for
         # preservation
         if not preserve:
-            _cleanup(downloaded_file, session_id)
+            _cleanup(input_file, session_id)

@@ -122,10 +122,20 @@ The simplest way to get started with Brownify is to find a song you want to modi
 ```sh
 # This example assumes that the brownify source is located in your home directory
 cd ~/brownify
-brownify https://www.youtube.com/watch?v=B4RqeAvE7iA boognish-christmas.mp3 --recipe-file recipes/boognish-brown
+brownify --youtube-input https://www.youtube.com/watch?v=B4RqeAvE7iA boognish-christmas.mp3 --recipe-file recipes/boognish-brown
 ```
 
 The result of this command is a file `boognish-christmas.mp3` located in the current directory.
+
+Sometimes Youtube makes changes which break the downloader libraries that are available. If this happens and you still want to try brownify, you can also pass a path to a local file as input. Below is an example using a cached version of the Christmas song:
+```sh
+# This example assumes that the brownify source is located in your home directory
+cd ~/brownify
+brownify --local-input samples/christmas.mp3 boognish-christmas.mp3 --recipe-file recipes/boognish-brown
+```
+
+Note that these examples use the following song (the locally stored version just being a short sample), which was released with no copyright under the creative commons license:
+It's Not Christmas Time (Without You) [feat. Kimmy Baggins] – RYYZN
 
 ## Python API
 The python documentation for the latest release can be found [here.](https://brownify.readthedocs.io/en/latest/brownify.html)

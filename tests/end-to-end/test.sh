@@ -11,7 +11,7 @@ NC="\033[0m"
 log_path=${test_abs_dir}/test.log
 recipe_path=${test_abs_dir}/../../recipes/boognish-brown
 # The following is a creative commons licensed song
-url=https://www.youtube.com/watch?v=B4RqeAvE7iA
+local_file=${test_abs_dir}/../../samples/christmas.mp3
 workspace=${test_abs_dir}/workspace
 set_c=
 set_l=
@@ -24,7 +24,7 @@ USAGE="USAGE: $test_filename [-h] [-c|-l LOG] [-r RECIPE] [-u URL]
   -c           Log to console [Default: Disabled]
   -l LOG       Path to log file [Default: ${log_path}]
   -r RECIPE    Path to a recipe file [Default: ${recipe_path}]
-  -u URL       Youtube URL for source song [Default: ${url}]
+  -i INPUT     Path to input file for source song [Default: ${local_file}]
 "
 
 while getopts ":chl:o:r:u:" opt; do
@@ -44,8 +44,8 @@ while getopts ":chl:o:r:u:" opt; do
         r )
             recipe_path=$(realpath --no-symlinks $OPTARG)
             ;;
-        u )
-            url=$OPTARG
+        i )
+            local_file=$OPTARG
             ;;
         \? )
             echo "Invalid option: $OPTARG" 1>&2
@@ -98,8 +98,8 @@ try() {
 try log setup
 try log pushd ${workspace}
 
-# Run brownify
-try log brownify ${url} ${workspace}/${OUTFILE} --recipe-file ${recipe_path}
+# Run brownify using a local input file
+try log brownify --local-input ${local_file} ${workspace}/${OUTFILE} --recipe-file ${recipe_path}
 
 # See if a file was successfully created
 if [ -f ${workspace}/${OUTFILE} ]; then
